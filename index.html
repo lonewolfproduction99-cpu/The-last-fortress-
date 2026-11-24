@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#1d2b2a" />
+    <title>Siegebound: Rebuild the Keep</title>
+    <!-- CrazyGames HTML5 SDK v3. On other domains it reports environment "disabled" and the game runs standalone. -->
+    <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+    <style>
+      html, body {
+        margin: 0; padding: 0; width: 100%; height: 100%;
+        overflow: hidden; background: #1d2b2a;
+        touch-action: none; overscroll-behavior: none;
+        -webkit-user-select: none; user-select: none;
+        -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+      }
+      #game { position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; }
+      #game canvas { display: block; touch-action: none; outline: none; }
+      #boot { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+        color: #f3e6c4; font: 600 18px system-ui, sans-serif; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="boot">Loading…</div>
+    <div id="game"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
