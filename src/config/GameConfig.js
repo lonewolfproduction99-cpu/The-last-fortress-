@@ -50,6 +50,27 @@ export const KEEP = {
   maxHealth: 500,
 };
 
+export const COMBAT = {
+  heroReach: 44, // beyond the enemy's own radius
+  heroImpactDelay: 0.16,
+  threatRadius: 150, // gathering pauses while an enemy is this close
+  regenDelay: 5, // seconds without damage before the hero heals
+  regenPerSecond: 3,
+  respawnInvulnerable: 2,
+};
+
+export const STRUCTURE_HP = {
+  wall: 250,
+  gate: 300,
+};
+
+// Flow-field pathfinding grid.
+export const NAV = {
+  cell: 32,
+  wallPenalty: 35, // extra cost for routing through a standing wall (enemies prefer gaps)
+  gatePenalty: 20, // gates are the preferred thing to break through
+};
+
 export const RESOURCE_TYPES = ['wood', 'stone', 'iron'];
 
 export const RESOURCE_LABELS = {

@@ -86,6 +86,16 @@ export const SoundFX = {
   buildDone() {
     [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.18, 'square', 0.07, null, i * 0.08));
   },
+  swing() { noise(0.09, 2400, 0.12); },
+  hit() { noise(0.06, 1500, 0.3); tone(180, 0.07, 'square', 0.08, 120); },
+  enemyDie() { tone(300, 0.25, 'sawtooth', 0.07, 90); },
+  hurt() { tone(160, 0.12, 'square', 0.1, 110); },
+  coin() { tone(988, 0.05, 'square', 0.05); tone(1318, 0.08, 'square', 0.05, null, 0.05); },
+  horn() { tone(196, 0.7, 'sawtooth', 0.07, 220); tone(147, 0.7, 'sawtooth', 0.05, 165); },
+  structureHit() { noise(0.07, 700, 0.18); },
+  structureBreak() { noise(0.5, 300, 0.4); tone(90, 0.5, 'sawtooth', 0.08, 50); },
+  defeat() { [392, 330, 262, 196].forEach((f, i) => tone(f, 0.35, 'triangle', 0.1, null, i * 0.22)); },
+  waveClear() { [523, 784, 1046].forEach((f, i) => tone(f, 0.2, 'square', 0.06, null, i * 0.1)); },
   click() { tone(880, 0.04, 'square', 0.05); },
   denied() { tone(200, 0.12, 'sawtooth', 0.06, 150); },
 };

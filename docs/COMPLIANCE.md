@@ -19,13 +19,13 @@ Still to read in detail: `/requirements/gameplay`, `/requirements/ads`, `/requir
 | 9 | Frame-rate independent | 🟡 | Delta-time movement, variable-step physics, dt-based camera smoothing. Needs a test on a 120 Hz device. |
 | 10 | Pause / resume / focus loss | 🟡 | Esc/P/button pause. Auto-pauses on blur/hidden. Audio is suspended and resumes on the next tap (iOS rule). |
 | 11 | SDK safe with standalone fallback | ✅ | All calls guarded. Works with SDK missing or `disabled`. |
-| 12 | `gameplayStart` / `gameplayStop` | 🟡 | Start after boot and on resume. Stop on manual pause. Not called on focus loss (per docs). |
+| 12 | `gameplayStart` / `gameplayStop` | 🟡 | Start after boot, on resume and on a new run. Stop on manual pause and on the defeat screen. Not called on focus loss (per docs). |
 | 13 | `loadingStart` / `loadingStop` | 🟡 | Called around Boot. Becomes meaningful once real assets load. |
-| 14 | Data module saves | ⬜ | Storage wrapper is ready (settings only). Full run save comes in Phase 6. |
+| 14 | Data module saves | ⬜ | Storage wrapper is ready (settings and best wave). Full run save comes in Phase 6. |
 | 15 | No third-party ads, works with ads unavailable | ✅ | No ad code at all yet |
 | 16 | Ad rules (Full Launch) | ⬜ | Phase 7 |
 | 17 | No external accounts, store links or promotion | ✅ | |
-| 18 | PEGI 12 content | ✅ | Cartoon medieval combat only |
+| 18 | PEGI 12 content | ✅ | Cartoon medieval combat, no blood (white hit sparks, fade-out deaths) |
 | 19 | `user-select: none` on body for mobile | ✅ | Plus `touch-action: none`, overscroll and long-press blocked |
 | 20 | Works in Chrome and Edge, reasonable on Safari | 🟡 | Chromium tested. Safari untested. |
 | 21 | Do not detect mobile via touch APIs | ✅ | The joystick hint appears only after a real touch. No device sniffing. |

@@ -18,8 +18,7 @@ export class BootScene extends Phaser.Scene {
     Platform.loadingStop();
     const boot = document.getElementById('boot');
     if (boot) boot.remove();
-    this.scene.start('Game');
-    this.scene.launch('UI');
+    this.scene.start('Game'); // GameScene launches the UI scene itself (also on restart)
     Platform.gameplayStart();
   }
 }

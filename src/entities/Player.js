@@ -14,6 +14,7 @@ export class Player {
     this.maxHealth = PLAYER.maxHealth;
     this.speed = PLAYER.speed;
     this.facing = 1;
+    this.alive = true;
     this.moving = false;
     this.walkTime = 0;
     this.swinging = false;
@@ -48,6 +49,11 @@ export class Player {
   }
 
   update(dt, keys) {
+    if (!this.alive) {
+      this.body.setVelocity(0, 0);
+      this.moving = false;
+      return;
+    }
     readMovement(keys, this.move);
     const { x, y } = this.move;
     this.body.setVelocity(x * this.speed, y * this.speed);
@@ -64,6 +70,7 @@ export class Player {
     this.shadow.setPosition(fx, fy).setDepth(fy - 1);
     this.sprite.setPosition(fx, fy - bob).setDepth(fy);
     this.sprite.setFlipX(this.facing < 0);
+    if (!this.alive) return;
     this.sprite.setAngle(this.moving ? Math.sin(this.walkTime * 14) * 4 : 0);
     this.tool.setPosition(fx + TOOL_OFFSET_X * this.facing, fy + TOOL_OFFSET_Y - bob).setDepth(fy + 0.5);
     this.tool.setFlipX(this.facing < 0);
@@ -113,6 +120,20 @@ export class Player {
 
   restTool() {
     if (!this.swinging) this.tool.setTexture('tool_sword');
+  }
+
+  setDead(dead) {
+    this.alive = !dead;
+    this.body.setVelocity(0, 0);
+    this.body.enable = !dead;
+    this.tool.setVisible(!dead);
+    this.scene.tweens.killTweensOf(this.sprite);
+    if (dead) {
+      this.swinging = false;
+      this.scene.tweens.add({ targets: this.sprite, angle: 90 * this.facing, alpha: 0.5, duration: 400, ease: 'Quad.easeIn' });
+    } else {
+      this.sprite.setAngle(0).setAlpha(1);
+    }
   }
 
   flash(color = 0xffffff) {

@@ -29,6 +29,10 @@ export class Effects {
     e.explode(6, x, y);
   }
 
+  hitSpark(x, y) {
+    this.sparkle.explode(8, x, y);
+  }
+
   dust(x, y) {
     this.dustEmitter.explode(2, x, y);
   }

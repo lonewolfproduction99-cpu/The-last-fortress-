@@ -2,7 +2,7 @@
 
 A 2D medieval castle-rebuilding and siege-defense game for the browser (desktop + mobile landscape), built with **Phaser 3 + Vite**, targeting **CrazyGames**.
 
-**Current state: Phase 1 prototype.** Move, gather wood and stone automatically, carry them in a 20-slot bag, and deliver them to white construction squares to repair the gate, repair a wall breach and build an archer position. All art is **temporary placeholder art drawn in code**. It will be replaced with Tiny Swords (Free Pack) once the asset ZIP is provided.
+**Current state: Phase 2 prototype.** Gather wood and stone, deliver them to white construction squares to repair the castle, and survive endless siege waves. Your hero fights automatically, walls and the gate can be broken and rebuilt, and the run ends when the Command Keep falls. All art is **temporary placeholder art drawn in code**. It will be replaced with Tiny Swords (Free Pack) once the asset ZIP is provided.
 
 ## Run locally
 
@@ -24,6 +24,8 @@ To test on a tablet on the same Wi-Fi: run `npm run dev` and open the `Network:`
 | Move | WASD / arrow keys | Drag anywhere on the left half of the screen (floating joystick) |
 | Gather | Automatic: stand next to a tree or rock | Same |
 | Build | Walk into a white square while carrying materials | Same |
+| Fight | Automatic: walk up to enemies | Same |
+| Start next wave early | "Start now" button (bonus gold) | Same |
 | Pause | Esc or P, or the ❚❚ button | ❚❚ button |
 | Mute | M, or in the pause menu | Pause menu |
 
@@ -53,6 +55,8 @@ src/
     GameConfig.js          All tuning numbers (speeds, capacities, timings)
     Buildings.js           Data-driven building definitions and costs
     MapLayout.js           Handcrafted map: walls, keep, gate, nodes, construction squares
+    Enemies.js             Enemy types and AI tuning
+    Waves.js               Wave timing and composition
   assets/
     AssetManifest.js       Central list of texture keys (placeholders now)
     PlaceholderTextures.js Temporary code-drawn art
@@ -60,8 +64,14 @@ src/
     Player.js              Hero movement, facing, tool swings
     ResourceNode.js        Trees and rocks: strikes, depletion, regrowth
     ConstructionSite.js    White squares: deposits, gold charge, build animation
+    Structure.js           Walls, gate and keep with health, ruin/restore
+    Enemy.js               Enemy AI: targeting, flow-field movement, attacks
   systems/
     Inventory.js Economy.js HarvestSystem.js Effects.js Tutorial.js Settings.js SoundFX.js
+    FlowField.js           Grid Dijkstra toward the keep, rebuilt when structures change
+    EnemyManager.js        Enemy pool, spawning, separation
+    CombatSystem.js        Hero auto-attack, damage, death, respawn
+    WaveManager.js         Prep countdown, spawning, rewards, early start
   input/
     InputState.js          Keyboard + joystick merged into one movement vector
     VirtualJoystick.js     Floating touch joystick
@@ -72,6 +82,7 @@ src/
   scenes/
     BootScene.js GameScene.js UIScene.js
   ui/SafeArea.js           Mobile safe-area insets
+  ui/Minimap.js            Overview map with attack-direction warnings
 docs/
   COMPLIANCE.md            CrazyGames requirement checklist
   ASSETS.md                Asset sources and licences

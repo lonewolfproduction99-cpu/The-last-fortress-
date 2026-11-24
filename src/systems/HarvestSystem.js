@@ -49,7 +49,10 @@ export class HarvestSystem {
       this.nodeTick = 0;
     }
 
-    if (this.isThreatened()) return;
+    if (!this.player.alive || this.isThreatened()) {
+      this.player.restTool();
+      return;
+    }
     const target = this.findTarget();
     this.target = target;
     if (!target) {
@@ -74,7 +77,7 @@ export class HarvestSystem {
 
   impact(node) {
     // Re-validate at the moment of impact: node may have depleted or the hero walked away.
-    if (!node.available || this.inventory.isFull) return;
+    if (!this.player.alive || !node.available || this.inventory.isFull) return;
     const d = Math.hypot(node.x - this.player.x, (node.y - this.player.y) * 1.4) - node.radius;
     if (d > HARVEST.reach + 12) return;
     const got = node.strike();

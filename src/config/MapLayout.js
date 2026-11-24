@@ -66,6 +66,23 @@ export const CONSTRUCTION_SITES = [
     requires: 'gate_main',
   },
   {
+    id: 'wall_ne',
+    building: 'wall',
+    x: 1792, y: 672, w: 160, h: 112,
+    blocks: ['1760,672', '1824,672'],
+    safeSpot: { x: 1792, y: 760 },
+    requires: 'gate_main',
+  },
+  {
+    id: 'wall_w',
+    building: 'wall',
+    x: 1120, y: 864, w: 112, h: 96,
+    blocks: ['1120,864'],
+    safeSpot: { x: 1200, y: 864 },
+    requires: 'gate_main',
+    cost: { wood: 5, stone: 6, gold: 0 },
+  },
+  {
     id: 'archer_post_sw',
     building: 'archerPost',
     x: 1376, y: 1336, w: 96, h: 96,

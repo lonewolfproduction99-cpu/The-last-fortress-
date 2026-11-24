@@ -83,7 +83,7 @@ export class ConstructionSite extends Phaser.Events.EventEmitter {
 
   /* ---------- per-frame update ---------- */
 
-  update(dt, player, inventory, economy, fx) {
+  update(dt, player, inventory, economy, fx, isActive) {
     if (this.status === 'building') {
       this.buildTimer += dt;
       const p = Math.min(1, this.buildTimer / CONSTRUCTION.buildSeconds);
@@ -94,7 +94,8 @@ export class ConstructionSite extends Phaser.Events.EventEmitter {
     }
     if (this.status !== 'open') return;
 
-    const inside = this.contains(player.x, player.y);
+    // Only the single "active" square (chosen by the scene) accepts deliveries.
+    const inside = isActive && player.alive;
     if (inside !== this.playerInside) {
       this.playerInside = inside;
       this.drawSquare(inside);
@@ -216,12 +217,22 @@ export class ConstructionSite extends Phaser.Events.EventEmitter {
     return c;
   }
 
+  /** Far-away squares show only their title and progress bar to reduce clutter. */
+  setDetailed(detailed) {
+    if (this.status !== 'open' || this.detailed === detailed) return;
+    this.detailed = detailed;
+    this.labelRows.forEach((r) => r.setVisible(detailed));
+    this.layoutLabel();
+    this.drawBar(this.progress, 0xf5c542);
+  }
+
   layoutLabel() {
     const rowH = 16;
     const titleH = 18;
     const barH = 7;
     const pad = 6;
-    const h = pad + titleH + this.labelRows.length * rowH + barH + pad + 2;
+    const rows = this.detailed === false ? 0 : this.labelRows.length;
+    const h = pad + titleH + rows * rowH + barH + pad + 2;
     this.labelHeight = h;
     // Container origin is the bottom-centre of the label.
     this.labelBg.clear();

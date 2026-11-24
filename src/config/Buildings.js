@@ -24,6 +24,12 @@ export const BUILDINGS = {
     maxHealth: 250,
     solidForPlayer: true,
   },
+  // Used for repair squares that appear when a wall section is destroyed.
+  wallSection: {
+    name: 'Wall Section',
+    verb: 'Repair',
+    cost: { wood: 4, stone: 5, gold: 0 },
+  },
   archerPost: {
     name: 'Archer Position',
     verb: 'Build',

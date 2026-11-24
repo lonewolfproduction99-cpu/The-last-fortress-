@@ -51,6 +51,40 @@ export function createPlaceholderTextures(scene) {
     g.lineStyle(2, 0x1d1d26, 1).strokeRoundedRect(8, 20, 24, 22, 4).strokeRoundedRect(9, 4, 22, 18, 6);
   });
 
+  // Enemy raiders (red faction). Weapons are part of the texture.
+  make(scene, 'raider', 40, 52, (g) => {
+    g.fillStyle(0x2b2b38).fillRect(12, 40, 6, 10).fillRect(22, 40, 6, 10);
+    g.fillStyle(0xb83a3a).fillRoundedRect(8, 20, 24, 22, 4); // red tunic
+    g.fillStyle(0x6b4423).fillRect(8, 32, 24, 3); // belt
+    g.fillStyle(0xe8b48a).fillRoundedRect(11, 6, 18, 16, 6); // face
+    g.fillStyle(0x7a4a2a).fillRoundedRect(9, 3, 22, 9, 4); // leather cap
+    g.fillStyle(0x1d1d26).fillRect(22, 13, 3, 3); // eye
+    g.fillStyle(0x8a5a2b).fillRect(32, 14, 3, 26); // club handle
+    g.fillStyle(0x9aa3ad).fillRect(30, 10, 8, 8); // club head
+    g.lineStyle(2, 0x1d1d26, 1).strokeRoundedRect(8, 20, 24, 22, 4);
+  });
+  make(scene, 'fast_raider', 40, 52, (g) => {
+    g.fillStyle(0x2b2b38).fillRect(13, 40, 5, 10).fillRect(22, 40, 5, 10);
+    g.fillStyle(0xe0773a).fillRoundedRect(10, 21, 20, 20, 4); // orange tunic
+    g.fillStyle(0xe8b48a).fillRoundedRect(12, 8, 16, 15, 6);
+    g.fillStyle(0x5a2a6a).fillTriangle(10, 12, 30, 12, 20, 0); // hood
+    g.fillStyle(0x1d1d26).fillRect(22, 15, 3, 3);
+    g.fillStyle(0xd9dde3).fillRect(31, 22, 3, 12); // dagger
+    g.lineStyle(2, 0x1d1d26, 1).strokeRoundedRect(10, 21, 20, 20, 4);
+  });
+  make(scene, 'captain', 52, 64, (g) => {
+    g.fillStyle(0x2b2b38).fillRect(16, 50, 8, 12).fillRect(28, 50, 8, 12);
+    g.fillStyle(0x7a1f1f).fillRoundedRect(8, 24, 36, 28, 5); // dark red armour
+    g.fillStyle(0xc9ced6).fillRect(8, 24, 36, 6); // pauldrons
+    g.fillStyle(0xf5c542).fillRect(24, 30, 4, 20);
+    g.fillStyle(0x9aa3ad).fillRoundedRect(12, 4, 28, 22, 7); // helmet
+    g.fillStyle(0x1d1d26).fillRect(26, 13, 12, 3);
+    g.fillStyle(0xd94c4c).fillRect(22, 0, 8, 6); // crest
+    g.fillStyle(0x6b4423).fillRect(44, 12, 4, 40); // axe handle
+    g.fillStyle(0xc9ced6).fillTriangle(46, 10, 52, 4, 52, 26).fillRect(44, 10, 6, 14);
+    g.lineStyle(2, 0x1d1d26, 1).strokeRoundedRect(8, 24, 36, 28, 5).strokeRoundedRect(12, 4, 28, 22, 7);
+  });
+
   // Tools are drawn pointing up with the handle at the bottom-centre.
   make(scene, 'tool_sword', 10, 34, (g) => {
     g.fillStyle(0xe7ebf0).fillRect(3, 0, 4, 24);

@@ -1,7 +1,7 @@
 {
   "name": "siegebound-rebuild-the-keep",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Siegebound: Rebuild the Keep - a 2D medieval castle-rebuilding and siege-defense game (Phaser 3).",
   "type": "module",
   "scripts": {

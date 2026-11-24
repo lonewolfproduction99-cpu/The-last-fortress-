@@ -12,60 +12,103 @@ export class Tutorial {
     const s = this.scene;
     const inv = s.inventory;
     const gate = s.sites.find((x) => x.id === 'gate_main');
+    const waves = s.waves;
 
     if (this.step === 'gather') {
-      const w = Math.min(inv.count('wood') + gate.delivered.wood, gate.cost.wood);
-      const st = Math.min(inv.count('stone') + gate.delivered.stone, gate.cost.stone);
-      if (w >= gate.cost.wood && st >= gate.cost.stone) {
-        this.step = 'deliver';
-        s.nodes.forEach((n) => n.setHighlighted(false));
-      } else {
-        const needWood = w < gate.cost.wood;
-        const tree = s.nodes.find((n) => n.tutorial && n.kind === 'tree');
-        const rock = s.nodes.find((n) => n.tutorial && n.kind === 'rock');
-        const target = needWood ? this.nearestAvailable('tree', tree) : this.nearestAvailable('rock', rock);
-        const marker = target ? { x: target.x, y: target.y - (target.kind === 'tree' ? 104 : 50) } : null;
-        this.set(`Gather materials — walk next to the ${needWood ? 'tree' : 'rock'}.  Wood ${w}/${gate.cost.wood}  ·  Stone ${st}/${gate.cost.stone}`, marker);
+      if (waves.state === 'active' && gate.status === 'open') {
+        this.defendObjective();
         return;
+      }
+      if (gate.status !== 'open') {
+        this.step = 'deliver';
+      } else {
+        const w = Math.min(inv.count('wood') + gate.delivered.wood, gate.cost.wood);
+        const st = Math.min(inv.count('stone') + gate.delivered.stone, gate.cost.stone);
+        if (w >= gate.cost.wood && st >= gate.cost.stone) {
+          this.step = 'deliver';
+          s.nodes.forEach((n) => n.setHighlighted(false));
+        } else {
+          const needWood = w < gate.cost.wood;
+          const target = this.nearestNode(needWood ? 'tree' : 'rock');
+          const marker = target ? { x: target.x, y: target.y - (target.kind === 'tree' ? 104 : 50) } : null;
+          const timer = waves.state === 'waiting' && waves.timer < 60 ? `  ·  Raiders in ${Math.ceil(waves.timer)}s` : '';
+          this.set(`Gather materials — walk next to the ${needWood ? 'tree' : 'rock'}.  Wood ${w}/${gate.cost.wood}  ·  Stone ${st}/${gate.cost.stone}${timer}`, marker);
+          return;
+        }
       }
     }
 
     if (this.step === 'deliver') {
       if (gate.status === 'building' || gate.status === 'done') {
-        this.step = 'expand';
+        this.step = 'defend';
+      } else if (waves.state === 'active') {
+        this.defendObjective();
+        return;
       } else {
         this.set('Carry the materials into the glowing square at the gate.', gate.markerPoint);
         return;
       }
     }
 
-    if (this.step === 'expand') {
-      const open = s.sites.filter((x) => x.status === 'open' || x.status === 'building');
-      if (open.length === 0 && gate.status === 'done') {
-        this.step = 'done';
-        this.doneTimer = 6;
+    if (this.step === 'defend') {
+      if (waves.completed >= 1) {
+        this.step = 'expand';
+      } else if (waves.state === 'active') {
+        this.defendObjective();
+        return;
       } else {
-        const target = this.nearestSite(open);
-        this.set('Keep rebuilding: repair the east wall and build an archer position.', target ? target.markerPoint : null);
+        this.set(`Raiders attack from the South in ${Math.ceil(waves.timer)}s! Defeat them for gold.`, null);
         return;
       }
     }
 
-    if (this.step === 'done') {
-      this.set('The keep stands again — for now. (Sieges arrive in the next update.)', null);
+    // From here on: point at breaches first, then unfinished construction.
+    const breach = this.nearestSite(s.sites.filter((x) => x.layout.dynamic && x.status === 'open'));
+    if (breach) {
+      this.set(`Repair the breached ${breach.building.name.toLowerCase()}!`, breach.markerPoint);
+      return;
     }
+    if (waves.state === 'active' && waves.current) {
+      this.defendObjective();
+      return;
+    }
+
+    if (this.step === 'expand') {
+      const open = s.sites.filter((x) => !x.layout.dynamic && (x.status === 'open' || x.status === 'building'));
+      if (open.length === 0) {
+        this.step = 'done';
+      } else {
+        const target = this.nearestSite(open);
+        this.set('Use your gold and materials: repair the walls and build an archer position.', target ? target.markerPoint : null);
+        return;
+      }
+    }
+
+    this.set('Survive the sieges. Gather, rebuild and defend the keep.', null);
   }
 
-  nearestAvailable(kind, fallback) {
+  defendObjective() {
+    const s = this.scene;
+    const p = s.player;
+    if (!p.alive) {
+      this.set(`Your hero has fallen — back in ${Math.ceil(s.combat.respawnRemaining)}s. The keep is exposed!`, null);
+      return;
+    }
+    const e = s.enemies.nearest(p.x, p.y);
+    const marker = e ? { x: e.x, y: e.y - 60 } : null;
+    this.set('Defend the keep! Walk up to raiders — your hero attacks automatically.', marker);
+  }
+
+  nearestNode(kind) {
     const p = this.scene.player;
     let best = null;
     let bestD = Infinity;
     for (const n of this.scene.nodes) {
       if (n.kind !== kind || !n.available) continue;
-      const d = Math.hypot(n.x - p.x, n.y - p.y);
+      const d = Math.hypot(n.x - p.x, n.y - p.y) - (n.tutorial ? 400 : 0);
       if (d < bestD) { bestD = d; best = n; }
     }
-    return best || fallback;
+    return best;
   }
 
   nearestSite(list) {
