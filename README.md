@@ -27,28 +27,26 @@ To test on a tablet on the same Wi-Fi: run `npm run dev` and open the `Network:`
 | Pause | Esc or P, or the ❚❚ button | ❚❚ button |
 | Mute | M, or in the pause menu | Pause menu |
 
-## Deploy to Cloudflare Pages (automatic on every push)
+## Deploy to Cloudflare (automatic on every push)
 
-One-time setup in the Cloudflare dashboard:
+The game is deployed as a **Cloudflare Worker with static assets**, connected to this GitHub repo (Workers Builds):
 
-1. **Workers & Pages → Create → Pages → Connect to Git**, then pick this GitHub repository.
-2. Build settings:
-   - Framework preset: **None** (or Vite)
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Environment variable (optional): `NODE_VERSION = 22` (the repo also has `.node-version`)
-3. Pick the production branch (e.g. `main`). Every other branch you push gets its own preview URL, such as `https://<branch>.<project>.pages.dev`.
+- Worker name: `the-last-fortress` (must match `name` in `wrangler.toml`)
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy` (uploads `dist/` as set in `wrangler.toml`)
 
-After that, every `git push` rebuilds and publishes automatically. Open the URL in your Android browser. No install is needed.
+Every push to the connected branch rebuilds and publishes. The live URL is shown in the Cloudflare dashboard (Workers & Pages → the-last-fortress), typically `https://the-last-fortress.<your-subdomain>.workers.dev`. Open it in your Android browser; nothing needs to be installed.
 
-The build version (e.g. `v0.1.0-a1b2c3d · disabled`) is shown in the bottom-right corner. It comes from Cloudflare's `CF_PAGES_COMMIT_SHA`, or from `git` when you build locally. The second word is the CrazyGames SDK environment: `disabled` on Cloudflare (expected), `local` on localhost, `crazygames` on CrazyGames. Add `?useLocalSdk=true` to a URL to force the SDK's local test mode.
+The build version (e.g. `v0.1.0-a1b2c3d · disabled`) is shown in the bottom-right corner. The commit comes from Cloudflare's `WORKERS_CI_COMMIT_SHA` or from `git`. The second word is the CrazyGames SDK environment: `disabled` on Cloudflare (expected), `local` on localhost, `crazygames` on CrazyGames. Add `?useLocalSdk=true` to a URL to force the SDK's local test mode.
+
+To deploy manually from a computer: `npm run build && npx wrangler deploy`.
 
 ## Project structure
 
 ```
 index.html                 Page shell, CSS that blocks touch gestures, CrazyGames SDK script
 vite.config.js             Relative base path, build version injection
-public/_headers            Cloudflare Pages cache headers
+public/_headers            Cloudflare cache headers
 src/
   main.js                  Phaser game config, gesture blocking, startup
   config/

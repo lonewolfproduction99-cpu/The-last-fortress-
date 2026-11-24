@@ -3,9 +3,11 @@ import { execSync } from 'node:child_process';
 import pkg from './package.json' with { type: 'json' };
 
 // Build identifier shown in-game (bottom-right corner).
-// Cloudflare Pages exposes CF_PAGES_COMMIT_SHA during its builds; locally we ask git.
+// Cloudflare Workers Builds exposes WORKERS_CI_COMMIT_SHA, Pages exposes CF_PAGES_COMMIT_SHA;
+// otherwise (local builds) we ask git.
 function commitId() {
-  if (process.env.CF_PAGES_COMMIT_SHA) return process.env.CF_PAGES_COMMIT_SHA.slice(0, 7);
+  const sha = process.env.WORKERS_CI_COMMIT_SHA || process.env.CF_PAGES_COMMIT_SHA;
+  if (sha) return sha.slice(0, 7);
   try {
     return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
   } catch {
